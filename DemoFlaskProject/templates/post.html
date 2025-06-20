@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }} — Flask Blog Demo</title>
+</head>
+<body>
+    <a href="{{ url_for('index') }}">← Back to list</a>
+    <h1>{{ post.title }}</h1>
+    <div>
+        {{ post.content }}
+    </div>
+    <h2>Comments</h2>
+    <ul>
+    {% for comment in comments %}
+        <li>
+            <b>{{ comment.author }}</b>: {{ comment.body }}
+        </li>
+    {% else %}
+        <li>No comments yet.</li>
+    {% endfor %}
+    </ul>
+    <h3>Add a Comment</h3>
+    <form method="post">
+        <input name="author" placeholder="Your name">
+        <br>
+        <textarea name="body" placeholder="Your comment"></textarea>
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

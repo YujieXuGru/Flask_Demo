@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Blog Demo</title>
+</head>
+<body>
+    <h1>Blog Posts</h1>
+    <ul>
+    {% for post in posts %}
+        <li>
+            <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a>
+            ({{ post.comments|length }} comments)
+        </li>
+    {% else %}
+        <li>No posts yet.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+
+
