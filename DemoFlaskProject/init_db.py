@@ -8,10 +8,10 @@ def init_db():
             post2 = BlogPost(title="Second Post", content="Flask works well with SQLite.")
             db.session.add_all([post1, post2])
             db.session.commit()
-            # Insert sample comments, some with missing values
+            # Valid sample comments, none with missing values
             c1 = Comment(post_id=post1.id, author="Alice", body="Great article!")
-            c2 = Comment(post_id=post1.id, author=None, body="Author forgot to enter a name")
-            c3 = Comment(post_id=post2.id, author="Bob", body=None)
+            c2 = Comment(post_id=post1.id, author="Eve", body="Informative post.")
+            c3 = Comment(post_id=post2.id, author="Bob", body="I learned a lot!")
             db.session.add_all([c1, c2, c3])
             db.session.commit()
             print("Database initialized with sample posts and comments.")
@@ -20,3 +20,4 @@ def init_db():
 
 if __name__ == '__main__':
     init_db()
+

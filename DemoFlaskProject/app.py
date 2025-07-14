@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort, request, redirect, url_for
+from flask import Flask, render_template, abort, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -6,6 +6,7 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'secret!'  # Needed to use flash for feedback messages
 db = SQLAlchemy(app)
 
 class BlogPost(db.Model):
@@ -34,6 +35,9 @@ def post_detail(post_id):
             # Will crash: post is None, so post.id is error!
             author = request.form.get('author')
             body = request.form.get('body')
+            if not author or not body:
+                flash('Error: Author and body must not be empty!', 'danger')
+                return render_template('notfound.html'), 404
             comment = Comment(post_id=post.id, author=author, body=body)  # bug here
             db.session.add(comment)
             db.session.commit()
@@ -41,7 +45,9 @@ def post_detail(post_id):
     if request.method == 'POST':
         author = request.form.get('author')
         body = request.form.get('body')
-        # Accept blank/None author and body, can cause weird UI and DB state!
+        if not author or not body:
+            flash('Error: Author and body must not be empty!', 'danger')
+            return redirect(url_for('post_detail', post_id=post_id))
         comment = Comment(post_id=post.id, author=author, body=body)
         db.session.add(comment)
         db.session.commit()
